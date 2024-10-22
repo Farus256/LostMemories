@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 1f5f2618844127b43808bcd77cb5a600
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 218424
+  packageName: pixel horror abandoned rural train station(Modular)
+  packageVersion: 2
+  assetPath: Assets/pixel horror abandoned rural  train station/scripts/MouseLook.cs
+  uploadId: 676368
