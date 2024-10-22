@@ -432,8 +432,7 @@ ModelImporter:
     - name: arm_twist.l
       parentName: arm_stretch.l
       position: {x: -0.00000011850148, y: -0.0000000033620744, z: 0.00000010656193}
-      rotation: {x: -0.00000018440193, y: -0.00000061467296, z: -0.000000035390375,
-        w: 1}
+      rotation: {x: -0.00000018440193, y: -0.00000061467296, z: -0.000000035390375, w: 1}
       scale: {x: 0.99999994, y: 0.99999994, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
@@ -459,10 +458,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 218424
-  packageName: pixel horror abandoned rural train station(Modular)
-  packageVersion: 2
-  assetPath: Assets/pixel horror abandoned rural  train station/Models/Hitogatas.fbx
-  uploadId: 676368
