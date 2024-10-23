@@ -2081,7 +2081,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 1}
   m_Intensity: 0.3
   m_Range: 10
   m_SpotAngle: 30
@@ -4784,6 +4784,22 @@ PrefabInstance:
       propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5283232381114891188, guid: fe4419068607daf4db3f2bee48b95b64, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.031
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283232381114891188, guid: fe4419068607daf4db3f2bee48b95b64, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.041
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283232381114891188, guid: fe4419068607daf4db3f2bee48b95b64, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256068729254546897, guid: fe4419068607daf4db3f2bee48b95b64, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6580,15 +6596,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5138801146966252556, guid: c1af999c83d6aa541bdd2b1383b49472, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17.524021
+      value: 15.14
       objectReference: {fileID: 0}
     - target: {fileID: 5138801146966252556, guid: c1af999c83d6aa541bdd2b1383b49472, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.53
+      value: 0.562
       objectReference: {fileID: 0}
     - target: {fileID: 5138801146966252556, guid: c1af999c83d6aa541bdd2b1383b49472, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.14
+      value: -26.99
       objectReference: {fileID: 0}
     - target: {fileID: 5138801146966252556, guid: c1af999c83d6aa541bdd2b1383b49472, type: 3}
       propertyPath: m_LocalRotation.w
