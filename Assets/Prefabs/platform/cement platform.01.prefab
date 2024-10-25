@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6173381198179452958}
   - component: {fileID: 3410924388474834731}
   - component: {fileID: 7300998720869871659}
-  - component: {fileID: 6954663014787734790}
+  - component: {fileID: 4137711950834804926}
   m_Layer: 0
   m_Name: cement platform.01
   m_TagString: Untagged
@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2841085167156277827}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3410924388474834731
 MeshFilter:
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6954663014787734790
-MeshCollider:
+--- !u!65 &4137711950834804926
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +102,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5372998822787519136, guid: 9f246ab041f11af498454df273e6c008, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 7.1150036, y: 2.1776705, z: 7.0005026}
+  m_Center: {x: -1.5285903, y: -0.19257909, z: -0.13229299}
