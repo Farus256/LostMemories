@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
     public CharacterController characterController;
 
     [Header("Настройки движения")]
@@ -15,26 +11,26 @@ public class PlayerController : MonoBehaviour
     [Header("Настройки камеры")]
     [SerializeField] private float sensitivity = 2.0f;
     [SerializeField] private Camera playerCamera;
-    [SerializeField] private float bobSpeed = 14f;
-    [SerializeField] private float bobAmount = 0.05f;
+    [SerializeField] private float bobSpeed = 6f;
+    [SerializeField] private float bobAmount = 0.06f;
 
     [Header("Настройки звука")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip stepsSound;
     [SerializeField] private float stepInterval = 0.5f;
 
-    private Vector3 _velocity = Vector3.zero;
+    private Vector3 m_Velocity = Vector3.zero;
+    private Vector3 m_DefaultCameraPosition;
 
-    private float _defaultYPos = 0;
-    private float _timer = 0;
-    private float _stepTimer;
-    private float _verticalRotation = 0;
+    private float m_Timer;
+    private float m_StepTimer;
+    private float m_VerticalRotation;
 
-
-    void Start()
+    private void Start()
     {
+        m_DefaultCameraPosition = playerCamera.transform.localPosition;
         Cursor.lockState = CursorLockMode.Locked;
-        _defaultYPos = playerCamera.transform.localPosition.y;
+
         AudioSourceInitial();
     }
 
@@ -44,7 +40,7 @@ public class PlayerController : MonoBehaviour
         RotatePlayer();
     }
 
-    void MovePlayer()
+    private void MovePlayer()
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
@@ -56,94 +52,102 @@ public class PlayerController : MonoBehaviour
             moveDirection.Normalize();
         }
 
-        Vector3 move = moveDirection * speed ;
+        Vector3 move = moveDirection * speed;
 
-        characterController.Move(move* Time.deltaTime);
+        characterController.Move(move * Time.deltaTime);
 
-        if (characterController.isGrounded && _velocity.y < 0)
+        if (characterController.isGrounded && m_Velocity.y < 0)
         {
-            _velocity.y = -3f;
+            m_Velocity.y = -3f;
         }
-        _velocity.y += gravity * Time.deltaTime;
-        characterController.Move(_velocity * Time.deltaTime);
+
+        m_Velocity.y += gravity * Time.deltaTime;
+
+        characterController.Move(m_Velocity * Time.deltaTime);
 
         PlayWalkSound(move);
-        CameraBob();
+        CameraBob(x, z);
     }
 
-    void AudioSourceInitial()
+    private void AudioSourceInitial()
     {
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
+
         audioSource.clip = stepsSound;
         audioSource.loop = true;
         audioSource.playOnAwake = false;
     }
 
-    void PlayWalkSound(Vector3 move)
+    private void PlayWalkSound(Vector3 move)
     {
-        if ( move.magnitude > 0.1f)
+        if (move.magnitude > 0.1f)
         {
-            _stepTimer += Time.deltaTime;
-            if (_stepTimer >= stepInterval)
+            m_StepTimer += Time.deltaTime;
+            if (m_StepTimer >= stepInterval)
             {
                 audioSource.PlayOneShot(stepsSound, audioSource.volume);
-                _stepTimer = 0f;
+                m_StepTimer = 0f;
             }
         }
         else
         {
-            _stepTimer = 0f;
+            m_StepTimer = 0f;
         }
     }
-    void RotatePlayer()
+
+    private void RotatePlayer()
     {
         float mouseX = Input.GetAxis("Mouse X") * sensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
 
         transform.Rotate(Vector3.up * mouseX);
 
-        _verticalRotation -= mouseY;
-        _verticalRotation = Mathf.Clamp(_verticalRotation, -90f, 90f);
+        m_VerticalRotation -= mouseY;
+        m_VerticalRotation = Mathf.Clamp(m_VerticalRotation, -90f, 90f);
 
-        playerCamera.transform.localEulerAngles = new Vector3(_verticalRotation, 0, 0);
+        playerCamera.transform.localEulerAngles = new Vector3(m_VerticalRotation, 0, 0);
     }
 
 
-    void CameraBob()
+    private void CameraBob(float x, float z)
     {
-        if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f)
+        bool isMoving = Mathf.Abs(x) > 0.1f || Mathf.Abs(z) > 0.1f;
+
+        if (isMoving)
         {
-            _timer += Time.deltaTime * bobSpeed;
+            m_Timer += Time.deltaTime * bobSpeed;
+
+            // Reset the timer periodically to prevent floating-point errors
+            if (m_Timer > Mathf.PI * 2)
+            {
+                m_Timer -= Mathf.PI * 2;
+            }
+
+            // Calculate horizontal and vertical bobbing
+            float horizontalBob = Mathf.Cos(m_Timer) * bobAmount * 0.5f;
+            float verticalBob = Mathf.Sin(m_Timer * 2) * bobAmount;
+
+            // Update the camera's position
             playerCamera.transform.localPosition = new Vector3(
-                playerCamera.transform.localPosition.x,
-                _defaultYPos + Mathf.Sin(_timer) * bobAmount,
-                playerCamera.transform.localPosition.z
+                m_DefaultCameraPosition.x + horizontalBob,
+                m_DefaultCameraPosition.y + verticalBob,
+                m_DefaultCameraPosition.z
             );
         }
         else
         {
-            if (_timer != 0)
-            {
-                _timer += Time.deltaTime * bobSpeed;
-                playerCamera.transform.localPosition = new Vector3(
-                    playerCamera.transform.localPosition.x,
-                    Mathf.Lerp(playerCamera.transform.localPosition.y, _defaultYPos, Time.deltaTime * bobSpeed),
-                    playerCamera.transform.localPosition.z
-                );
+            // Smoothly reduce the timer to zero
+            m_Timer = Mathf.MoveTowards(m_Timer, 0f, Time.deltaTime * bobSpeed);
 
-                if (Mathf.Abs(playerCamera.transform.localPosition.y - _defaultYPos) < 0.001f)
-                {
-                    _timer = 0;
-                    playerCamera.transform.localPosition = new Vector3(
-                        playerCamera.transform.localPosition.x,
-                        _defaultYPos,
-                        playerCamera.transform.localPosition.z
-                    );
-                }
-            }
+            // Smoothly return the camera to its default position
+            playerCamera.transform.localPosition = Vector3.Lerp(
+                playerCamera.transform.localPosition,
+                m_DefaultCameraPosition,
+                Time.deltaTime * bobSpeed * 2f
+            );
         }
     }
 }

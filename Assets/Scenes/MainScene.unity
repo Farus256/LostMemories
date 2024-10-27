@@ -975,6 +975,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: a30f3b53d56644d499bdddd31a50b881, type: 2}
+    - target: {fileID: 5991102122491755284, guid: 46364dce0e99c4741a52eb8521d48e6e, type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6547977003745114080, guid: 46364dce0e99c4741a52eb8521d48e6e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -18.2
@@ -5055,11 +5059,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5983201330314117610, guid: fe4419068607daf4db3f2bee48b95b64, type: 3}
       propertyPath: bobSpeed
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5983201330314117610, guid: fe4419068607daf4db3f2bee48b95b64, type: 3}
       propertyPath: bobAmount
-      value: 0.1
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: 8256068729254546897, guid: fe4419068607daf4db3f2bee48b95b64, type: 3}
       propertyPath: m_Volume
@@ -6769,37 +6773,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf3eb9f382de32b46bf0e7d751ad177f, type: 3}
---- !u!4 &322844115111076965
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1094702018267004639}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 18
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1094702018267004639
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 322844115111076965}
-  m_Layer: 0
-  m_Name: trainStop
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1001 &3623792575328821626
 PrefabInstance:
   m_ObjectHideFlags: 0

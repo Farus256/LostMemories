@@ -56,14 +56,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71ae7cd8cd82e874cae304480ca96cc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterController: {fileID: 3758109445006505879}
   speed: 5
+  gravity: -9.81
   sensitivity: 2
   playerCamera: {fileID: 1106549315136693672}
-  bobSpeed: 13
-  bobAmount: 0.1
-  stepsSound: {fileID: 8300000, guid: 8bc94ec6ed537e743b481638bdcd503d, type: 3}
+  bobSpeed: 6
+  bobAmount: 0.06
   audioSource: {fileID: 8256068729254546897}
-  characterController: {fileID: 3758109445006505879}
+  stepsSound: {fileID: 8300000, guid: 8bc94ec6ed537e743b481638bdcd503d, type: 3}
+  stepInterval: 0.5
 --- !u!143 &3758109445006505879
 CharacterController:
   m_ObjectHideFlags: 0
@@ -86,7 +88,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.5
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0.8
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
@@ -115,7 +117,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4642521178990159218}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -134,7 +136,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.15
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
