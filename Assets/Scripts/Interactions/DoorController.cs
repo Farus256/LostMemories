@@ -6,7 +6,7 @@ public class DoorController : InteractionController
     public Animator doorAnimator; // Ссылка на компонент Animator двери
 
     private bool m_DoorOpen = false;
-    
+
     protected override void Interaction()
     {
         if(!m_DoorOpen){
