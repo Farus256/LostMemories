@@ -1,53 +1,19 @@
 using UnityEngine;
 
-public class DoorController : MonoBehaviour
+public class DoorController : InteractionController
 {
     [Header("Настройки двери")]
     public Animator doorAnimator; // Ссылка на компонент Animator двери
-    public KeyCode interactKey = KeyCode.E; // Клавиша взаимодействия
-    public float interactDistance = 3f; // Максимальная дистанция взаимодействия
-    public bool isPlayerNear = false; // Флаг, находится ли игрок рядом
-    public Transform playerTransform; // Ссылка на трансформ игрока
 
-
-    private bool doorOpen = false;
-
-    private void Start()
+    private bool m_DoorOpen = false;
+    
+    protected override void Interaction()
     {
-        if (doorAnimator == null)
-        {
-            doorAnimator = GetComponent<Animator>();
-            if (doorAnimator == null)
-            {
-                Debug.LogError("DoorController: Отсутствует компонент Animator на двери.");
-            }
+        if(!m_DoorOpen){
+            OpenDoor(true);
+            m_DoorOpen = true;
         }
-    }
-
-    private void Update()
-    {
-        // Проверяем дистанцию до игрока
-        if (playerTransform)
-        {
-            float distance = Vector3.Distance(transform.position, playerTransform.position);
-            if (distance <= interactDistance)
-            {
-                isPlayerNear = true;
-
-                if (Input.GetKeyDown(interactKey))
-                {
-                    if(!doorOpen){
-                        OpenDoor(true);
-                        doorOpen = true;
-                    }
-                    else { OpenDoor(false); doorOpen = false; }
-                }
-            }
-            else
-            {
-                isPlayerNear = false;
-            }
-        }
+        else { OpenDoor(false); m_DoorOpen = false; }
     }
 
     private void OpenDoor(bool state)

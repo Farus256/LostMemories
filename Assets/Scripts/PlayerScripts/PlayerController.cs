@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
     private float m_StepTimer;
     private float m_VerticalRotation;
 
+    private bool m_IsMovementEnabled = true;
+
     private void Start()
     {
         m_DefaultCameraPosition = playerCamera.transform.localPosition;
@@ -36,7 +38,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        MovePlayer();
+        if (m_IsMovementEnabled) { MovePlayer(); }
         RotatePlayer();
     }
 
@@ -149,5 +151,11 @@ public class PlayerController : MonoBehaviour
                 Time.deltaTime * bobSpeed * 2f
             );
         }
+    }
+
+    public void SetMovementEnabled(bool isEnabled)
+    {
+        m_IsMovementEnabled = isEnabled;
+        /*m_Velocity = Vector3.zero;*/
     }
 }
