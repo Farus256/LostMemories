@@ -24,6 +24,7 @@ public abstract class InteractionController : MonoBehaviour
         if (playerTransform && IsPlayerNear() && IsLookingAtObject() && Input.GetKeyDown(interactKey))
         {
             Interaction();
+            Debug.Log("Interaction");
         }
     }
     protected abstract void Interaction();
