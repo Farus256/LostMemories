@@ -50,5 +50,6 @@ public class FlashlightController : PickupItemController
         col.enabled = true;
         transform.SetParent(null);
         meshRenderer.castShadows = true;
+        rb.AddForce(m_PlayerCamera.transform.forward * throwForce, ForceMode.VelocityChange);
     }
 }

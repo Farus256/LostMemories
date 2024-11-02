@@ -10,11 +10,20 @@ public abstract class InteractionController : MonoBehaviour
     public Transform playerTransform; // Трансформ игрока
 
     protected PlayerController m_PlayerController; // Ссылка на PlayerController для отключения движения
-
     protected Camera m_PlayerCamera;
 
+    private RectTransform crosshair;
     protected virtual void Start()
     {
+        GameObject crosshairObject = GameObject.Find("Crosshair");
+        if (crosshairObject != null)
+        {
+            crosshair = crosshairObject.GetComponent<RectTransform>();
+        }
+        else
+        {
+            Debug.LogWarning("Crosshair not found in the scene. Please add it to the Canvas.");
+        }
         m_PlayerCamera = Camera.main;
         m_PlayerController = playerTransform.GetComponent<PlayerController>();
     }
@@ -31,19 +40,21 @@ public abstract class InteractionController : MonoBehaviour
 
     protected bool IsPlayerNear()
     {
-        // Проверяем, находится ли игрок на нужной дистанции от стула
         float distance = Vector3.Distance(transform.position, playerTransform.position);
         return distance <= interactDistance;
     }
 
     protected bool IsLookingAtObject()
     {
-        // Создаем Ray из центра экрана и проверяем, что игрок смотрит на стул
-        Ray ray = m_PlayerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-        if (Physics.Raycast(ray, out RaycastHit hit, interactDistance))
+        Vector3 screenPoint = crosshair.position;
+        Ray ray = m_PlayerCamera.ScreenPointToRay(screenPoint);
+
+        float sphereRadius = 0.1f; // Радиус сферы (можно увеличить для более точного подбора)
+        if (Physics.SphereCast(ray, sphereRadius, out RaycastHit hit, interactDistance))
         {
             return hit.transform == transform;
         }
         return false;
     }
+
 }
