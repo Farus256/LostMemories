@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 1000012924596716}
   m_LocalRotation: {x: -0.68597865, y: 0.68597865, z: -0.17156151, w: 0.17156151}
   m_LocalPosition: {x: 0.61, y: 1.98, z: 1.2}
-  m_LocalScale: {x: 7, y: 7, z: 7}
+  m_LocalScale: {x: 8, y: 8, z: 8}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 494551960058849671}
@@ -50,12 +50,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactKey: 101
-  interactDistance: 3
+  interactDistance: 4
   playerTransform: {fileID: 0}
-  toggleLightKey: 102
   dropKey: 103
+  throwForce: 3
+  highlightMaterial: {fileID: 2100000, guid: 24e0343172af9474c8d18b2e7a5b9f7a, type: 2}
+  toggleLightKey: 102
   flashlightLight: {fileID: 8912053440864947174}
-  heldPosition: {x: 0, y: 0, z: 0}
+  heldPosition: {x: 0.3, y: -0.15, z: 0.1}
   heldRotation: {x: 0, y: 0, z: 0}
 --- !u!33 &33000010457591440
 MeshFilter:
@@ -78,8 +80,8 @@ MeshRenderer:
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
@@ -115,7 +117,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000012924596716}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -133,7 +135,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!65 &1006538598552267764
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -180,7 +182,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 660782879731918013}
   m_LocalRotation: {x: -0, y: -0.016728474, z: -0, w: 0.99986017}
-  m_LocalPosition: {x: 0.0009, y: 0.0008, z: 0.0512}
+  m_LocalPosition: {x: 0.001, y: 0.0008, z: 0.0479}
   m_LocalScale: {x: 0.02499999, y: 0.025, z: 0.02499999}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -199,13 +201,13 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
-  m_Range: 10
-  m_SpotAngle: 30
+  m_Intensity: 1.5
+  m_Range: 30
+  m_SpotAngle: 70
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -241,7 +243,7 @@ Light:
   m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 2
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
