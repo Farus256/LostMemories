@@ -1,15 +1,15 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class ChairController : InteractionController
 {
     [Header("Настройки сидения")]
-    public Transform sitPosition; // Позиция для сидения на стуле
-    public float sitTransitionSpeed = 2f; // Скорость перехода к позиции сидения
-    private bool m_IsSitting = false; // Флаг для проверки состояния сидения
+    public Transform sitPosition;
+    public float sitTransitionDuration = 0.5f;
+    private bool m_IsSitting = false;
 
     private Vector3 m_PlayerPositionDefault;
-    private Quaternion m_PlayerRotationDefault;
-
+    //private Quaternion m_PlayerRotationDefault;
 
     protected override void Update()
     {
@@ -28,7 +28,7 @@ public class ChairController : InteractionController
         if (!m_IsSitting)
         {
             m_PlayerPositionDefault = playerTransform.position;
-            m_PlayerRotationDefault = playerTransform.rotation;
+            //m_PlayerRotationDefault = playerTransform.rotation;
             SitDown();
         }
         else
@@ -39,37 +39,23 @@ public class ChairController : InteractionController
 
     private void SitDown()
     {
-        // Запускаем корутину для плавного перемещения к позиции сидения
-        StartCoroutine(MoveToPosition(sitPosition.position, sitPosition.rotation));
-        m_IsSitting = true;
-        m_PlayerController.SetMovementEnabled(false); // Отключаем движение
+        playerTransform.DOKill();
+
+        playerTransform.DOMove(sitPosition.position, sitTransitionDuration).OnComplete(() =>
+        {
+            m_IsSitting = true;
+            m_PlayerController.SetMovementEnabled(false);
+        });
     }
 
     private void StandUp()
     {
-        // Запускаем корутину для плавного возврата к исходной позиции
-        StartCoroutine(MoveToPosition(m_PlayerPositionDefault, m_PlayerRotationDefault));
-        m_IsSitting = false;
-        m_PlayerController.SetMovementEnabled(true); // Включаем движение
-    }
+        playerTransform.DOKill();
 
-    private System.Collections.IEnumerator MoveToPosition(Vector3 targetPosition, Quaternion targetRotation)
-    {
-        float elapsedTime = 0f;
-
-        Vector3 startingPosition = playerTransform.position;
-
-
-        while (elapsedTime < 1f)
+        playerTransform.DOMove(m_PlayerPositionDefault, sitTransitionDuration).OnComplete(() =>
         {
-            playerTransform.position = Vector3.Lerp(startingPosition, targetPosition, elapsedTime * sitTransitionSpeed);
-
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        playerTransform.position = targetPosition;
-
+            m_IsSitting = false;
+            m_PlayerController.SetMovementEnabled(true);
+        });
     }
 }
