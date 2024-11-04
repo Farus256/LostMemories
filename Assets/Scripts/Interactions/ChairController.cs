@@ -39,7 +39,7 @@ public class ChairController : InteractionController
 
     private void SitDown()
     {
-        playerTransform.DOKill();
+        //playerTransform.DOKill();
 
         playerTransform.DOMove(sitPosition.position, sitTransitionDuration).OnComplete(() =>
         {
