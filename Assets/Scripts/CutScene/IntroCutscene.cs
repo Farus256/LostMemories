@@ -7,13 +7,20 @@ public class IntroCutscene : MonoBehaviour
 {
     public Camera cutsceneCamera;
     public Camera mainCamera;
-    public Animator cutsceneAnimator;  // Animator для камеры
+    public Animator cutsceneAnimator;
     public Image topBlackImage;
     public Image bottomBlackImage;
     public AudioSource radioAudio;
 
+    private Vector2 topImageStartPos;
+    private Vector2 bottomImageStartPos;
+
     void Start()
     {
+        // Сохраняем начальные позиции для восстановления после моргания
+        topImageStartPos = topBlackImage.rectTransform.anchoredPosition;
+        bottomImageStartPos = bottomBlackImage.rectTransform.anchoredPosition;
+
         cutsceneCamera.enabled = true;
         mainCamera.enabled = false;
 
@@ -22,37 +29,38 @@ public class IntroCutscene : MonoBehaviour
 
     private IEnumerator PlayCutscene()
     {
-        // 1. Моргание (глаза открываются)
-        yield return StartCoroutine(Blink(0f, 1000f, 4f));
-
-        // 2. Анимация подъема и поворота камеры
-        cutsceneAnimator.SetTrigger("StartCutscene");
-
-        // Ждем окончания анимации
-        yield return new WaitForSeconds(2f); // Длительность анимации подъема и поворота
-
-        // 3. Проигрывание звука
         radioAudio.Play();
-        yield return new WaitForSeconds(radioAudio.clip.length);
 
-        // 4. Моргание (глаза закрываются)
-        yield return StartCoroutine(Blink(300f, 0f, 0.5f));
+        yield return Blink(true, 4f);
 
-        // 5. Переключение на основную камеру
+        yield return Anim(7.5f);
+
+        yield return Blink(false, 4f);
+
         cutsceneCamera.enabled = false;
         mainCamera.enabled = true;
+        yield return Blink(true, 4f);
     }
 
-    private IEnumerator Blink(float startOffset, float endOffset, float duration)
+    private IEnumerator Blink(bool openEyes, float duration)
     {
-        // Анимация верхнего изображения: двигаем вниз
-        topBlackImage.rectTransform.DOAnchorPosY(endOffset, duration)
-            .SetEase(Ease.InOutQuad);
+        if (openEyes)
+        {
+            topBlackImage.rectTransform.DOAnchorPosY(topImageStartPos.y + 400f, duration).SetEase(Ease.InOutQuad);
+            bottomBlackImage.rectTransform.DOAnchorPosY(bottomImageStartPos.y - 400f, duration).SetEase(Ease.InOutQuad);
+        }
+        else
+        {
+            topBlackImage.rectTransform.DOAnchorPosY(topImageStartPos.y, duration).SetEase(Ease.InOutQuad);
+            bottomBlackImage.rectTransform.DOAnchorPosY(bottomImageStartPos.y, duration).SetEase(Ease.InOutQuad);
+        }
 
-        // Анимация нижнего изображения: двигаем вверх
-        bottomBlackImage.rectTransform.DOAnchorPosY(-endOffset, duration)
-            .SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(duration);
+    }
 
+    private IEnumerator Anim(float duration)
+    {
+        cutsceneAnimator.SetTrigger("StartCutscene");
         yield return new WaitForSeconds(duration);
     }
 }
