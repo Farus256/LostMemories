@@ -52,4 +52,10 @@ public class FlashlightController : PickupItemController
         meshRenderer.castShadows = true;
         rb.AddForce(m_PlayerCamera.transform.forward * throwForce, ForceMode.VelocityChange);
     }
+
+    public void ToggleFlashLightOnce()
+    {
+        isOn = !isOn;
+        flashlightLight.enabled = isOn;
+    }
 }

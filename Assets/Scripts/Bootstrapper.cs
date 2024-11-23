@@ -12,16 +12,15 @@ public class Bootstrapper : MonoBehaviour
     private void Awake()
     {
         BlinkController.InitializeBlink();
+        EnableMenu();
+    }
+
+    private void EnableMenu()
+    {
         menuController.enabled = true;
         introCutscene.enabled = false;
         player.enabled = false;
     }
-
-    private void Start()
-    {
-
-    }
-
     public void StartGame()
     {
         player.enabled = true;
