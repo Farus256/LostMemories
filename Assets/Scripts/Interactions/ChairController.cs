@@ -5,7 +5,7 @@ public class ChairController : InteractionController
 {
     [Header("Настройки сидения")]
     public Transform sitPosition;
-    public float sitTransitionDuration = 0.5f;
+    public float sitTransitionDuration = 1f;
     private bool m_IsSitting = false;
 
     private Vector3 m_PlayerPositionDefault;
@@ -39,7 +39,7 @@ public class ChairController : InteractionController
 
     private void SitDown()
     {
-        //playerTransform.DOKill();
+        playerTransform.DOKill();
 
         playerTransform.DOMove(sitPosition.position, sitTransitionDuration).OnComplete(() =>
         {

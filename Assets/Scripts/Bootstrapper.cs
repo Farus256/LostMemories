@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Bootstrapper : MonoBehaviour
 {
     public MenuController menuController;
-    public IntroCutscene introCutscene;
+    [FormerlySerializedAs("introCutScene")] [FormerlySerializedAs("introCutscene")] public CutScene cutScene;
 
     public PlayerController player;
+    
+    public bool skipCutscene;
 
     private void Awake()
     {
@@ -18,13 +21,17 @@ public class Bootstrapper : MonoBehaviour
     private void EnableMenu()
     {
         menuController.enabled = true;
-        introCutscene.enabled = false;
+        cutScene.enabled = false;
         player.enabled = false;
     }
+    public void StartCutscene()
+    {
+        cutScene.enabled = true;
+        cutScene.PlayIntroCutscene(skipCutscene);
+    }
+
     public void StartGame()
     {
         player.enabled = true;
-        introCutscene.enabled = true;
-        introCutscene.PlayIntroCutscene();
     }
 }

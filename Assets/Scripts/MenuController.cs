@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
 
 public class MenuController : MonoBehaviour
 {
@@ -12,10 +12,13 @@ public class MenuController : MonoBehaviour
     public GameObject flashlight;
     public GameObject radio;
 
+    public Canvas menuCanvas;
+
     private Animator m_FlashlightAnimator;
     private Animator m_RadioAnimator;
 
     private FlashlightController m_FlashlightController;
+
 
     private string m_CurrentHitName;
     private void Start()
@@ -28,6 +31,7 @@ public class MenuController : MonoBehaviour
         m_FlashlightAnimator = flashlight.GetComponent<Animator>();
         m_RadioAnimator = radio.GetComponent<Animator>();
         m_FlashlightController = flashlight.GetComponent<FlashlightController>();
+
         StartCoroutine(WakeUp(true));
     }
 
@@ -65,7 +69,6 @@ public class MenuController : MonoBehaviour
             }
         }
 
-
         switch (m_CurrentHitName)
         {
             case "Radio":
@@ -91,8 +94,8 @@ public class MenuController : MonoBehaviour
         m_FlashlightAnimator.enabled = false;
         m_RadioAnimator.enabled = false;
 
-        bootstrapper.StartGame();
-
+        bootstrapper.StartCutscene();
+        menuCanvas.enabled = false;
         menuCamera.enabled = false;
         cutsceneCamera.enabled = true;
         m_FlashlightController.ToggleFlashLightOnce();
