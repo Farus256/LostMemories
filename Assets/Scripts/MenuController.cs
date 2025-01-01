@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Cursor = UnityEngine.Cursor;
 
 public class MenuController : MonoBehaviour
@@ -19,85 +18,126 @@ public class MenuController : MonoBehaviour
 
     private FlashlightController m_FlashlightController;
 
-
     private string m_CurrentHitName;
+
     private void Start()
     {
+        // Настройка курсора
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        // Включаем камеру меню
         menuCamera.enabled = true;
         cutsceneCamera.enabled = false;
 
-        m_FlashlightAnimator = flashlight.GetComponent<Animator>();
-        m_RadioAnimator = radio.GetComponent<Animator>();
-        m_FlashlightController = flashlight.GetComponent<FlashlightController>();
+        // Инициализация компонентов
+        if (flashlight != null)
+        {
+            m_FlashlightAnimator = flashlight.GetComponent<Animator>();
+            m_FlashlightController = flashlight.GetComponent<FlashlightController>();
+        }
 
-        StartCoroutine(WakeUp(true));
-    }
-
-    private IEnumerator WakeUp(bool state)
-    {
-        yield return BlinkController.Blink(state, 3f);
+        if (radio != null)
+        {
+            m_RadioAnimator = radio.GetComponent<Animator>();
+        }
     }
 
     private void Update()
     {
+        HandleRaycast();
+        HandleHoverAnimations();
+    }
+
+    private void HandleRaycast()
+    {
+        // Проверяем, куда направлен луч из камеры меню
         Ray ray = menuCamera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             m_CurrentHitName = hit.collider.gameObject.name;
+
             if (hit.collider.CompareTag("MenuObj"))
             {
                 Debug.Log($"Наведен на объект: {hit.collider.gameObject.name}");
-                if (hit.collider.gameObject.name == "Radio")
+
+                if (hit.collider.gameObject.name == "Radio" && Input.GetMouseButtonDown(0))
                 {
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        Debug.Log("Work in progress");
-                    }
+                    Debug.Log("Work in progress");
                 }
-                else if (hit.collider.gameObject.name == "Flashlight")
+                else if (hit.collider.gameObject.name == "Flashlight" && Input.GetMouseButtonDown(0))
                 {
-                    if (Input.GetMouseButtonDown(0))
+                    if (m_FlashlightController != null)
                     {
                         m_FlashlightController.ToggleFlashLightOnce();
-                        m_FlashlightAnimator.SetBool("isHover", false);
-                        StartCoroutine(TransitionToGame());
                     }
+                    StartCoroutine(TransitionToGame());
                 }
             }
         }
+        else
+        {
+            m_CurrentHitName = null; // Сброс имени объекта, если ничего не выбрано
+        }
+    }
 
+    private void HandleHoverAnimations()
+    {
+        // Управляем анимациями наведения
         switch (m_CurrentHitName)
         {
             case "Radio":
-                m_RadioAnimator.SetBool("isHover", true);
+                if (m_RadioAnimator != null)
+                    m_RadioAnimator.SetBool("isHover", true);
                 break;
+
             case "Flashlight":
-                m_FlashlightAnimator.SetBool("isHover", true);
+                if (m_FlashlightAnimator != null)
+                    m_FlashlightAnimator.SetBool("isHover", true);
                 break;
+
             default:
-                m_FlashlightAnimator.SetBool("isHover", false);
-                m_RadioAnimator.SetBool("isHover", false);
+                if (m_FlashlightAnimator != null)
+                    m_FlashlightAnimator.SetBool("isHover", false);
+
+                if (m_RadioAnimator != null)
+                    m_RadioAnimator.SetBool("isHover", false);
                 break;
         }
-
-
     }
+
     private IEnumerator TransitionToGame()
     {
-        yield return StartCoroutine(WakeUp(false));
+        // Анимация перехода в игру
+        if (bootstrapper != null)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        m_FlashlightAnimator.enabled = false;
-        m_RadioAnimator.enabled = false;
+            if (m_FlashlightAnimator != null)
+                m_FlashlightAnimator.enabled = false;
 
-        bootstrapper.StartCutscene();
-        menuCanvas.enabled = false;
-        menuCamera.enabled = false;
-        cutsceneCamera.enabled = true;
-        m_FlashlightController.ToggleFlashLightOnce();
+            if (m_RadioAnimator != null)
+                m_RadioAnimator.enabled = false;
+
+            bootstrapper.StartCutscene();
+
+            // Отключаем элементы меню
+            if (menuCanvas != null)
+                menuCanvas.enabled = false;
+
+            menuCamera.enabled = false;
+            cutsceneCamera.enabled = true;
+
+            if (m_FlashlightController != null)
+                m_FlashlightController.ToggleFlashLightOnce();
+        }
+        else
+        {
+            Debug.LogError("Bootstrapper is not assigned!");
+        }
+
+        yield return null; // Задержка для завершения кадра
     }
 }

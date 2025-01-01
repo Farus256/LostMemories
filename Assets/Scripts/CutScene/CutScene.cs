@@ -14,6 +14,8 @@ public class CutScene : MonoBehaviour
 
     public AudioSource radioAudio;
     
+    public BlinkController blinkController;
+    
     public void PlayIntroCutscene(bool skipCutscene)
     {
         cutsceneCamera.enabled = true;
@@ -25,19 +27,19 @@ public class CutScene : MonoBehaviour
     {
         if (!skipCutscene)
         {
-            radioAudio.Play();
+            //radioAudio.Play();
 
-            yield return BlinkController.Blink(true, 4f);
+            blinkController.StartBlink(true, 4f);
 
             yield return Anim(7.5f);
 
-            yield return BlinkController.Blink(false, 4f);
+            blinkController.StartBlink(false, 4f);
         }
         
         bootstrapper.StartGame();
         cutsceneCamera.enabled = false;
         mainCamera.enabled = true;
-        yield return BlinkController.Blink(true, 4f);
+        blinkController.StartBlink(true, 4f);
     }
 
     private IEnumerator Anim(float duration)

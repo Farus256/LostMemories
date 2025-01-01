@@ -1,18 +1,30 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public abstract class BlinkController : MonoBehaviour
+public class BlinkController : MonoBehaviour
 {
-    private static Image _topBlackImage;
-    private static Image _bottomBlackImage;
-    private static Vector2 _topImageStartPos;
-    private static Vector2 _bottomImageStartPos;
+    public static BlinkController Instance { get; private set; } // Singleton
 
+    private Image _topBlackImage;
+    private Image _bottomBlackImage;
+    private Vector2 _topImageStartPos;
+    private Vector2 _bottomImageStartPos;
 
-    public static void InitializeBlink()
+    private void Awake()
+    {
+        // Настройка Singleton
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // Сохраняем объект между сценами
+    }
+
+    public void InitializeBlink()
     {
         _topBlackImage = GameObject.Find("TopBlackImage").GetComponent<Image>();
         _bottomBlackImage = GameObject.Find("BottomBlackImage").GetComponent<Image>();
@@ -20,8 +32,15 @@ public abstract class BlinkController : MonoBehaviour
         _topImageStartPos = _topBlackImage.rectTransform.anchoredPosition;
         _bottomImageStartPos = _bottomBlackImage.rectTransform.anchoredPosition;
     }
-    public static IEnumerator Blink(bool openEyes, float duration)
+
+    private IEnumerator Blink(bool openEyes, float duration)
     {
+        if (_topBlackImage == null || _bottomBlackImage == null)
+        {
+            Debug.LogError("BlinkController is not initialized. Call InitializeBlink first.");
+            yield break;
+        }
+
         if (openEyes)
         {
             _topBlackImage.rectTransform.DOAnchorPosY(_topImageStartPos.y + 600f, duration).SetEase(Ease.InOutQuad);
@@ -34,5 +53,10 @@ public abstract class BlinkController : MonoBehaviour
         }
 
         yield return new WaitForSeconds(duration);
+    }
+
+    public void StartBlink(bool openEyes, float duration)
+    {
+        StartCoroutine(Blink(openEyes, duration));
     }
 }

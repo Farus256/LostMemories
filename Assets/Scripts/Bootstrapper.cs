@@ -9,13 +9,29 @@ public class Bootstrapper : MonoBehaviour
     [FormerlySerializedAs("introCutScene")] [FormerlySerializedAs("introCutscene")] public CutScene cutScene;
 
     public PlayerController player;
+    public BlinkController blinkController; // Ссылка на BlinkController
     
     public bool skipCutscene;
+    public Camera cutsceneCamera;
+    public Camera menuCamera;
+    public Camera mainCamera;
 
     private void Awake()
     {
-        BlinkController.InitializeBlink();
-        EnableMenu();
+        // Инициализируем BlinkController
+        if (blinkController != null)
+        {
+            blinkController.InitializeBlink();
+        }
+        else
+        {
+            Debug.LogError("BlinkController is not assigned in the inspector!");
+        }
+
+        if (!skipCutscene)
+            EnableMenu();
+        
+        StartGame();
     }
 
     private void EnableMenu()
@@ -24,6 +40,7 @@ public class Bootstrapper : MonoBehaviour
         cutScene.enabled = false;
         player.enabled = false;
     }
+
     public void StartCutscene()
     {
         cutScene.enabled = true;
@@ -32,6 +49,20 @@ public class Bootstrapper : MonoBehaviour
 
     public void StartGame()
     {
+        menuController.enabled = false;
+        cutScene.enabled = false;
+        cutsceneCamera.enabled = false;
+        menuCamera.enabled = false;
+        mainCamera.enabled = true;
         player.enabled = true;
+        
+        if (blinkController != null)
+        {
+            blinkController.StartBlink(true, 3f);
+        }
+        else
+        {
+            Debug.LogError("BlinkController is not assigned!");
+        }
     }
 }
