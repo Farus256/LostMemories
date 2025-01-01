@@ -156,6 +156,6 @@ public class PlayerController : MonoBehaviour
     public void SetMovementEnabled(bool isEnabled)
     {
         m_IsMovementEnabled = isEnabled;
-        /*m_Velocity = Vector3.zero;*/
+        m_Velocity = Vector3.zero;
     }
 }
