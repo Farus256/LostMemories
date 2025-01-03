@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class FlashlightController : PickupItemController
 {
@@ -31,7 +33,7 @@ public class FlashlightController : PickupItemController
             }
         }
     }
-
+    
     protected override void PickUp()
     {
         isHeld = true;
@@ -40,16 +42,16 @@ public class FlashlightController : PickupItemController
         transform.SetParent(m_PlayerCamera.transform);
         transform.localPosition = heldPosition;
         transform.localEulerAngles = heldRotation;
-        meshRenderer.castShadows = false;
+        meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
     }
-
+    
     protected override void Drop()
     {
         isHeld = false;
         rb.isKinematic = false;
         col.enabled = true;
         transform.SetParent(null);
-        meshRenderer.castShadows = true;
+        meshRenderer.shadowCastingMode = ShadowCastingMode.On;
         rb.AddForce(m_PlayerCamera.transform.forward * throwForce, ForceMode.VelocityChange);
     }
 

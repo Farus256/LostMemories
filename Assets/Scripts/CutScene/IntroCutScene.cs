@@ -3,8 +3,10 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections;
 
-public class CutScene : MonoBehaviour
+public class IntroCutScene : MonoBehaviour
 {
+    public static IntroCutScene Instance { get; private set; }
+
     public Camera cutsceneCamera;
     public Camera mainCamera;
 
@@ -13,33 +15,45 @@ public class CutScene : MonoBehaviour
     public Bootstrapper bootstrapper;
 
     public AudioSource radioAudio;
-    
+
     public BlinkController blinkController;
-    
-    public void PlayIntroCutscene(bool skipCutscene)
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void PlayIntroCutscene()
     {
         cutsceneCamera.enabled = true;
         mainCamera.enabled = false;
-        StartCoroutine(PlayCutscene(skipCutscene));
+        StartCoroutine(PlayCutscene());
     }
 
-    private IEnumerator PlayCutscene(bool skipCutscene)
+    private IEnumerator PlayCutscene()
     {
-        if (!skipCutscene)
-        {
-            //radioAudio.Play();
+        //radioAudio.Play();
+            
+        blinkController.StartBlink(true, 4f);
+        yield return new WaitForSeconds(4f);
+            
+        yield return Anim(5.5f);
 
-            blinkController.StartBlink(true, 4f);
+        blinkController.StartBlink(false, 4f);
+        yield return new WaitForSeconds(4f);
 
-            yield return Anim(7.5f);
-
-            blinkController.StartBlink(false, 4f);
-        }
-        
         bootstrapper.StartGame();
         cutsceneCamera.enabled = false;
         mainCamera.enabled = true;
         blinkController.StartBlink(true, 4f);
+        yield return new WaitForSeconds(4f);
     }
 
     private IEnumerator Anim(float duration)

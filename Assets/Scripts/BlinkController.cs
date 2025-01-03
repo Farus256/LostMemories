@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class BlinkController : MonoBehaviour
 {
-    public static BlinkController Instance { get; private set; } // Singleton
+    public static BlinkController Instance { get; private set; }
 
     private Image _topBlackImage;
     private Image _bottomBlackImage;
@@ -14,14 +14,12 @@ public class BlinkController : MonoBehaviour
 
     private void Awake()
     {
-        // Настройка Singleton
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject); // Сохраняем объект между сценами
     }
 
     public void InitializeBlink()

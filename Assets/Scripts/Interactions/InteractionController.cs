@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class InteractionController : MonoBehaviour
 {
-    [Header("Настройки сидения")]
     public KeyCode interactKey = KeyCode.E; // Клавиша взаимодействия
     public float interactDistance = 3f; // Максимальная дистанция для взаимодействия
     public Transform playerTransform; // Трансформ игрока
