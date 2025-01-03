@@ -4,6 +4,8 @@ using Cursor = UnityEngine.Cursor;
 
 public class MenuController : MonoBehaviour
 {
+    public static MenuController Instance { get; private set; }
+
     public Camera menuCamera;
     public Camera cutsceneCamera;
     public Bootstrapper bootstrapper;
@@ -12,6 +14,8 @@ public class MenuController : MonoBehaviour
     public GameObject radio;
 
     public Canvas menuCanvas;
+    
+    public BlinkController blinkController;
 
     private Animator m_FlashlightAnimator;
     private Animator m_RadioAnimator;
@@ -20,17 +24,26 @@ public class MenuController : MonoBehaviour
 
     private string m_CurrentHitName;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void Start()
     {
-        // Настройка курсора
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
-        // Включаем камеру меню
         menuCamera.enabled = true;
         cutsceneCamera.enabled = false;
 
-        // Инициализация компонентов
         if (flashlight != null)
         {
             m_FlashlightAnimator = flashlight.GetComponent<Animator>();
@@ -51,7 +64,6 @@ public class MenuController : MonoBehaviour
 
     private void HandleRaycast()
     {
-        // Проверяем, куда направлен луч из камеры меню
         Ray ray = menuCamera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
@@ -78,13 +90,12 @@ public class MenuController : MonoBehaviour
         }
         else
         {
-            m_CurrentHitName = null; // Сброс имени объекта, если ничего не выбрано
+            m_CurrentHitName = null;
         }
     }
 
     private void HandleHoverAnimations()
     {
-        // Управляем анимациями наведения
         switch (m_CurrentHitName)
         {
             case "Radio":
@@ -109,7 +120,8 @@ public class MenuController : MonoBehaviour
 
     private IEnumerator TransitionToGame()
     {
-        // Анимация перехода в игру
+        blinkController.StartBlink(false, 4f);
+        yield return new WaitForSeconds(4f);
         if (bootstrapper != null)
         {
             Cursor.visible = false;
@@ -123,7 +135,6 @@ public class MenuController : MonoBehaviour
 
             bootstrapper.StartCutscene();
 
-            // Отключаем элементы меню
             if (menuCanvas != null)
                 menuCanvas.enabled = false;
 
@@ -137,7 +148,8 @@ public class MenuController : MonoBehaviour
         {
             Debug.LogError("Bootstrapper is not assigned!");
         }
-
-        yield return null; // Задержка для завершения кадра
+        blinkController.StartBlink(true, 4f);
+        yield return new WaitForSeconds(4f);
+        yield return null;
     }
 }

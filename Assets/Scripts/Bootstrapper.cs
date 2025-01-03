@@ -6,19 +6,19 @@ using UnityEngine.Serialization;
 public class Bootstrapper : MonoBehaviour
 {
     public MenuController menuController;
-    [FormerlySerializedAs("introCutScene")] [FormerlySerializedAs("introCutscene")] public CutScene cutScene;
+    public IntroCutScene introCutScene;
 
     public PlayerController player;
-    public BlinkController blinkController; // Ссылка на BlinkController
+    public BlinkController blinkController;
     
     public bool skipCutscene;
+   
     public Camera cutsceneCamera;
     public Camera menuCamera;
     public Camera mainCamera;
 
     private void Awake()
     {
-        // Инициализируем BlinkController
         if (blinkController != null)
         {
             blinkController.InitializeBlink();
@@ -30,27 +30,29 @@ public class Bootstrapper : MonoBehaviour
 
         if (!skipCutscene)
             EnableMenu();
-        
-        StartGame();
+        else
+            StartGame();
     }
 
     private void EnableMenu()
     {
         menuController.enabled = true;
-        cutScene.enabled = false;
+        introCutScene.enabled = false;
         player.enabled = false;
+        
+        blinkController.StartBlink(true, 3f);
     }
 
     public void StartCutscene()
     {
-        cutScene.enabled = true;
-        cutScene.PlayIntroCutscene(skipCutscene);
+        introCutScene.enabled = true;
+        introCutScene.PlayIntroCutscene();
     }
 
     public void StartGame()
     {
         menuController.enabled = false;
-        cutScene.enabled = false;
+        introCutScene.enabled = false;
         cutsceneCamera.enabled = false;
         menuCamera.enabled = false;
         mainCamera.enabled = true;
